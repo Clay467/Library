@@ -4,34 +4,33 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/tt-norms-medium" type="text/css"/>
+
     <title>Library</title>
-    <style>
-        body {
-            background-color: #333;
-            color: white;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 10px;
-            width: 201px;
-        }
-        button[type='submit'] {
-            width: 100px;
-            padding: 2px 0;
-        }
-    </style>
 </head>
 <body>
-    <form>
-        <label for="title">Title: <input type="text" name="title" id="inputTitle" required></label>
-        <label for="author">Author: <input type="text" name="author" id="inputAuthor" required></label>
-        <label for="pages">Pages: <input type="number" name="pages" id="inputPages" min="1" required></label>
-        <button id="submitBtn" type="submit">Submit</button>
-    </form>
-    <div id="bookArea"></div>
-    <button id="clearAll">Clear All</button>
+    <header>
+        <h1>Library</h1>
+        <h2>Clay467
+            <a href="https://github.com/Clay467" target="_blank"><img id="github-logo" src="./images/GitHub-Logo.png"></a>
+        </h2>
+    </header>
+    <main>
+        <button id="addBook">&#43;</button>
+    </main>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form>
+                <label for="title">Title: <input type="text" name="title" id="inputTitle" required></label>
+                <label for="author">Author: <input type="text" name="author" id="inputAuthor" required></label>
+                <label for="pages">Pages: <input type="number" name="pages" id="inputPages" min="1" required></label>
+                <button id="submitBtn" type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+    <!-- <button id="clearAll">Clear All</button> -->
     <script src="./script.js"></script>
 </body>
 </html>

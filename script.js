@@ -1,14 +1,39 @@
 const form = document.querySelector('form');
-const bookArea = document.getElementById('bookArea');
+const bookArea = document.getElementsByTagName('main')[0];
 let myLibrary = JSON.parse(localStorage.getItem('library') || '[]');
+const modal = document.getElementById('myModal');
+const addBookBtn = document.getElementById('addBook');
+const span = document.getElementsByClassName('close')[0];
 
-const clearBtn = document.getElementById('clearAll');
+// const clearBtn = document.getElementById('clearAll');
 
-clearBtn.addEventListener('click', () => {
-    window.localStorage.removeItem('library');
-    myLibrary = [];
-    bookArea.innerHTML = '';
-});
+//modal
+
+function openModal() {
+    modal.style.display = 'block';
+}
+
+function closeModal() {
+    modal.style.display = 'none';
+}
+
+addBookBtn.onclick = openModal;
+
+span.onclick = closeModal;
+
+window.onclick = function(e) {
+    if (e.target == modal) {
+        closeModal();
+    }
+}
+
+
+
+// clearBtn.addEventListener('click', () => {
+//     window.localStorage.removeItem('library');
+//     myLibrary = [];
+//     bookArea.innerHTML = '';
+// });
 
 displayBook();
 
@@ -16,6 +41,7 @@ form.addEventListener('submit', submitForm);
 
 function submitForm(e) {
     e.preventDefault();
+    closeModal();
     addBook();
     clearForm();
     displayBook();
@@ -39,19 +65,55 @@ function addBook() {
     localStorage.setItem('library', JSON.stringify(myLibrary));
 }
 
-function displayBook() {
-    bookArea.innerHTML = '';
+function removeBook(e) {
+    //get class of book item which correlates to the index
+    className = e.currentTarget.parentNode.className;
+    
+    //remove arr from storage and remove book obj based on index, then add back into storage, then redisplay books
 
-    myLibrary.forEach(element => {
-        const para = document.createElement('p');
-        const node = document.createTextNode(`${element.title} by ${element.author} is ${element.pages} pages!`);
-        para.appendChild(node);
-        bookArea.appendChild(para);
-    });
+    window.localStorage.removeItem('library');
+    myLibrary.splice(className, 1);
+    localStorage.setItem('library', JSON.stringify(myLibrary));
+
+    displayBook();
 }
 
 function clearForm() {
     inputTitle.value = '';
     inputAuthor.value = '';
     inputPages.value = '';
+}
+
+function displayBook() {
+    bookArea.innerHTML = '';
+    bookArea.appendChild(addBookBtn);
+
+    for (let i = 0;i<myLibrary.length;i++) {
+        const newDiv = document.createElement('div');
+        newDiv.classList.add(i);
+
+        const titleNode = document.createTextNode(`"${myLibrary[i].title}"`);
+        const authorNode = document.createTextNode(myLibrary[i].author);
+        const pagesNode = document.createTextNode(`${myLibrary[i].pages} pages`);
+
+        const para1 = document.createElement('p');
+        const para2 = document.createElement('p');
+        const para3 = document.createElement('p');
+
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Remove';
+
+        para1.appendChild(titleNode);
+        para2.appendChild(authorNode);
+        para3.appendChild(pagesNode);
+        newDiv.appendChild(para1);
+        newDiv.appendChild(para2);
+        newDiv.appendChild(para3);
+        newDiv.appendChild(removeButton);
+        bookArea.appendChild(newDiv);
+
+        removeButton.addEventListener('click', (e) => {
+            removeBook(e);
+        });
+    }
 }
