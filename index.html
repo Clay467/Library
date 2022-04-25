@@ -21,11 +21,14 @@
     </main>
     <div id="myModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <div class="modal-title">
+                Add a book
+            </div>
             <form>
-                <label for="title">Title: <input type="text" name="title" id="inputTitle" required></label>
-                <label for="author">Author: <input type="text" name="author" id="inputAuthor" required></label>
-                <label for="pages">Pages: <input type="number" name="pages" id="inputPages" min="1" required></label>
+                <input type="text" name="title" id="inputTitle" placeholder="Title" required>
+                <!-- <input type="text" name="author" id="inputAuthor" placeholder="Author" required>
+                <input type="number" name="pages" id="inputPages" min="1" placeholder="Pages" required>
+                <input type="text" name="ISBN" id="ISBN" min="1" placeholder="ISBN" required> -->
                 <button id="submitBtn" type="submit">Submit</button>
             </form>
         </div>
