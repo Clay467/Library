@@ -3,12 +3,15 @@ const bookArea = document.getElementsByTagName('main')[0];
 let myLibrary = JSON.parse(localStorage.getItem('library') || '[]');
 const modal = document.getElementById('myModal');
 const addBookBtn = document.getElementById('addBook');
+const searchResults = document.getElementById('searchResults');
 
+searchBar = document.getElementById('searchBar');
 
- const inputAuthor = document.getElementById('inputAuthor').value;
- const inputPages = document.getElementById('inputPages').value;
+displayBook();
 
-// const clearBtn = document.getElementById('clearAll');
+addBookBtn.onclick = openModal;
+
+searchBar.addEventListener('input', debounce(searchBooks, 300));
 
 //modal
 
@@ -17,10 +20,10 @@ function openModal() {
 }
 
 function closeModal() {
+    searchBar.value = '';
+    searchResults.innerHTML = '';
     modal.style.display = 'none';
 }
-
-addBookBtn.onclick = openModal;
 
 window.onclick = function(e) {
     if (e.target == modal) {
@@ -28,98 +31,125 @@ window.onclick = function(e) {
     }
 }
 
-displayBook();
+ class Book {
+     constructor(title, author, thumbnail) {
+         this.title = title;
+         this.author = author;
+         this.thumbnail = thumbnail;
+     }
+ }
 
-form.addEventListener('submit', submitForm);
+ function addBook(title, author, thumbnail) {
+     let book = new Book(title, author, thumbnail);
+     myLibrary.push(book);
+     localStorage.setItem('library', JSON.stringify(myLibrary));
+     closeModal();
+     displayBook();
+ }
 
-function submitForm(e) {
-    e.preventDefault();
-    const inputTitle = document.getElementById('inputTitle').value;
-    inputTitle.replace(/\s/g, '+');
-    searchBooks(inputTitle);
-    closeModal();
-    addBook();
-    clearForm();
-    displayBook();
+ function removeBook(e) {
+     className = e.currentTarget.parentNode.className;
+     window.localStorage.removeItem('library');
+     myLibrary.splice(className, 1);
+     localStorage.setItem('library', JSON.stringify(myLibrary));
+     displayBook();
+ }
+
+ function displayBook() {
+     bookArea.innerHTML = '';
+     bookArea.appendChild(addBookBtn);
+
+     for (let i = 0;i<myLibrary.length;i++) {
+         const newDiv = document.createElement('div');
+         const titleNode = document.createTextNode(`"${myLibrary[i].title}"`);
+         const authorNode = document.createTextNode(myLibrary[i].author);
+         const img = document.createElement('img');
+         const para1 = document.createElement('p');
+         const para2 = document.createElement('p');
+         const removeButton = document.createElement('button');
+
+         img.setAttribute('src', myLibrary[i].thumbnail);
+
+         newDiv.classList.add(i);
+         removeButton.textContent = 'Remove';
+
+         para1.appendChild(titleNode);
+         para2.appendChild(authorNode);
+         newDiv.appendChild(img);
+         newDiv.appendChild(para1);
+         newDiv.appendChild(para2);
+         newDiv.appendChild(removeButton);
+         bookArea.appendChild(newDiv);
+
+         removeButton.addEventListener('click', (e) => {
+             removeBook(e);
+         });
+     }
+ }
+
+ function displaySearchResults(data){
+
+    searchResults.innerHTML = '';
+
+    for (let i=0;i<data.items.length;i++) {
+        let returnedTitle = data.items[i].volumeInfo.title;
+        let returnedAuthor = data.items[i].volumeInfo.authors;
+        let thumbnail;
+
+        if (data.items[i].volumeInfo.imageLinks != undefined) {
+            thumbnail = data.items[i].volumeInfo.imageLinks.thumbnail;
+        } else {
+            thumbnail = './images/nullCover.png'
+        }
+
+        const titleNode = document.createTextNode(returnedTitle);
+        const authorNode = document.createTextNode(returnedAuthor);
+        const para1 = document.createElement('p');
+        const para2 = document.createElement('p');
+        const img = document.createElement('img');
+        const bookToDisplay = document.createElement('div');
+        const bookInformation = document.createElement('div');
+
+        img.setAttribute('src', thumbnail);
+
+        para1.appendChild(titleNode);
+        para2.appendChild(authorNode);
+        bookInformation.appendChild(para1);
+        bookInformation.appendChild(para2);
+        bookToDisplay.appendChild(img);
+        bookToDisplay.appendChild(bookInformation);
+
+        bookToDisplay.addEventListener('click', addBook.bind(this, returnedTitle, returnedAuthor, thumbnail));
+
+        searchResults.appendChild(bookToDisplay);
+    }
 }
 
-// class Book {
-//     constructor(title, author, pages) {
-//         this.title = title;
-//         this.author = author;
-//         this.pages = pages;
-//     }
-// }
-
-// function addBook() {
-//     let book = new Book(inputTitle, inputAuthor, inputPages);
-//     myLibrary.push(book);
-//     localStorage.setItem('library', JSON.stringify(myLibrary));
-// }
-
-// function removeBook(e) {
-//     //get class of book item which correlates to the index
-//     className = e.currentTarget.parentNode.className;
-    
-//     //remove arr from storage and remove book obj based on index, then add back into storage, then redisplay books
-
-//     window.localStorage.removeItem('library');
-//     myLibrary.splice(className, 1);
-//     localStorage.setItem('library', JSON.stringify(myLibrary));
-
-//     displayBook();
-// }
-
-function clearForm() {
-    inputTitle.value = '';
-    // inputAuthor.value = '';
-    // inputPages.value = '';
+function searchBooks(){
+    let searchQuery = searchBar.value.replace(/\s/g, '+');
+    if (searchQuery.length > 0) {
+        getDataFromGoogleBooks(searchQuery);
+    }
 }
 
-// function displayBook() {
-//     bookArea.innerHTML = '';
-//     bookArea.appendChild(addBookBtn);
-
-//     for (let i = 0;i<myLibrary.length;i++) {
-//         const newDiv = document.createElement('div');
-//         newDiv.classList.add(i);
-
-//         const titleNode = document.createTextNode(`"${myLibrary[i].title}"`);
-//         const authorNode = document.createTextNode(myLibrary[i].author);
-//         const pagesNode = document.createTextNode(`${myLibrary[i].pages} pages`);
-
-//         const para1 = document.createElement('p');
-//         const para2 = document.createElement('p');
-//         const para3 = document.createElement('p');
-
-//         const removeButton = document.createElement('button');
-//         removeButton.textContent = 'Remove';
-
-//         para1.appendChild(titleNode);
-//         para2.appendChild(authorNode);
-//         para3.appendChild(pagesNode);
-//         newDiv.appendChild(para1);
-//         newDiv.appendChild(para2);
-//         newDiv.appendChild(para3);
-//         newDiv.appendChild(removeButton);
-//         bookArea.appendChild(newDiv);
-
-//         removeButton.addEventListener('click', (e) => {
-//             removeBook(e);
-//         });
-//     }
-// }
-
-function searchBooks(inputTitle) {
-
-
-
-    fetch(`https://www.googleapis.com/books/v1/volumes?q=${inputTitle}&key=AIzaSyAJz7T2KwI4VncI6x_5Sa1uQpVelZelmTE`).then(function(response) {
-    return response.json();
-  }).then(function(data) {
-    console.log(data);
-  }).catch(function() {
-    console.log("Booo");
-  });
+function debounce(func, delay) {
+    let debounceTimer;
+    return function() {
+        const context = this
+        const args = arguments
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => func.apply(context, args), delay)
+  };
+}
+function getDataFromGoogleBooks(searchQuery) {
+    let response = fetch(`https://www.googleapis.com/books/v1/volumes?q=${searchQuery}&key=AIzaSyAJz7T2KwI4VncI6x_5Sa1uQpVelZelmTE`);
+    response
+        .then (data => data.json())
+        .then (data => {
+            displaySearchResults(data);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
 }
 
