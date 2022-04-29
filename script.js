@@ -1,4 +1,3 @@
-const form = document.querySelector('form');
 const bookArea = document.getElementsByTagName('main')[0];
 let myLibrary = JSON.parse(localStorage.getItem('library') || '[]');
 const modal = document.getElementById('myModal');
@@ -61,6 +60,8 @@ window.onclick = function(e) {
 
      for (let i = 0;i<myLibrary.length;i++) {
          const newDiv = document.createElement('div');
+         const textDiv = document.createElement('div');
+         const bookDiv = document.createElement('div');
          const titleNode = document.createTextNode(`"${myLibrary[i].title}"`);
          const authorNode = document.createTextNode(myLibrary[i].author);
          const img = document.createElement('img');
@@ -75,11 +76,13 @@ window.onclick = function(e) {
 
          para1.appendChild(titleNode);
          para2.appendChild(authorNode);
+         textDiv.appendChild(para1);
+         textDiv.appendChild(para2);
          newDiv.appendChild(img);
-         newDiv.appendChild(para1);
-         newDiv.appendChild(para2);
-         newDiv.appendChild(removeButton);
-         bookArea.appendChild(newDiv);
+         newDiv.appendChild(textDiv);
+         bookDiv.appendChild(newDiv);
+         bookDiv.appendChild(removeButton);
+         bookArea.appendChild(bookDiv);
 
          removeButton.addEventListener('click', (e) => {
              removeBook(e);

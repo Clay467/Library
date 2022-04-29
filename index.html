@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/tt-norms-medium" type="text/css"/>
-
+    <link rel="shortcut icon" href="./images/library.svg">
     <title>Library</title>
 </head>
 <body>
@@ -14,20 +14,26 @@
         <h1>Library</h1>
         <h2>Clay467
             <a href="https://github.com/Clay467" target="_blank"><img id="github-logo" src="./images/GitHub-Logo.png"></a>
+            <div class="tooltip">
+                <img id="help-icon" src="./images/help-icon.svg" alt="help">
+                <span class="tooltiptext">
+                    Press the plus button to add a book!
+                </span>
+            </div>
         </h2>
     </header>
     <main>
-        <button id="addBook">&#43;</button>
+        <div>
+            <button id="addBook">&#43;</button>
+        </div>
     </main>
     <div id="myModal" class="modal">
         <div class="modal-content">
             <div class="modal-title">
                 Add a book
             </div>
-            <form>
-                <input type="text" name="title" id="searchBar" placeholder="Search Title" required>
-                <div id="searchResults"></div>
-            </form>
+            <input type="text" name="title" id="searchBar" placeholder="Search Title">
+            <div id="searchResults"></div>
         </div>
     </div>
     <script src="./script.js"></script>
