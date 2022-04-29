@@ -145,7 +145,7 @@ function debounce(func, delay) {
   };
 }
 function getDataFromGoogleBooks(searchQuery) {
-    let response = fetch(`https://www.googleapis.com/books/v1/volumes?q=${searchQuery}&key=AIzaSyAJz7T2KwI4VncI6x_5Sa1uQpVelZelmTE`);
+    let response = fetch(`https://www.googleapis.com/books/v1/volumes?q=${searchQuery}&key=${APIkeyhere}`);
     response
         .then (data => data.json())
         .then (data => {
