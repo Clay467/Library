@@ -8,8 +8,8 @@ It contains an add button that allows the user to add books to their shelf and s
 The things I had to learn to complete this project are: 
 
 - How to connect to an API 
-    - how to use the fetch function in JS
-    -What a promise is
+- how to use the fetch function in JS
+-What a promise is
 - How to implement a debounce on the search bar so as not to repeatedly fetch to the api while the user is typing
 -How to access local storage to save and access memory.
 -What JSON is
