@@ -71,7 +71,7 @@ window.onclick = function(e) {
 
          img.setAttribute('src', myLibrary[i].thumbnail);
 
-         newDiv.classList.add(i);
+         newDiv.parentNode.classList.add(i);
          removeButton.textContent = 'Remove';
 
          para1.appendChild(titleNode);
