@@ -1,7 +1,7 @@
 # Library
 A place to store books
 
-This project is part of The Odin Project. It involves creating book objects that are then displayed on the screen with their name, author, and number of pages. 
+This project involves creating book objects that are then displayed on the screen with their name, author, and number of pages. 
 
 It contains an add button that allows the user to add books to their shelf and stores them in local memory. It connects to google books api and has a dynamic book search bar that allows the user to select the book they are looking for, then displays the selected book's thumbnail, title, and author.
 
